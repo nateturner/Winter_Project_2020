@@ -1,3 +1,4 @@
+
 from flask import Flask, redirect, url_for, request
 from riotwatcher import LolWatcher, ApiError
 
@@ -7,9 +8,23 @@ app = Flask(__name__)
 def home():
    return 'Hello World'
 
+api_key = 'RGAPI-23dbfb58-88f4-436a-a30e-818fe71f0f77'
+watcher = LolWatcher(api_key)
+my_region = 'na1'
+
 @app.route('/<summoner_name>')
 def lookup(summoner_name):
-    return 'Showing data for %s' % summoner_name
+   output = "Showing data for %s<br/><br/>" % summoner_name
+   me = watcher.summoner.by_name(my_region, 'Rad Radius')
+   output+="ACCOUNT DATA<br/><br/>"
+   for line in me:
+      output+=(str(line) + ': ' + str(me[line])+"<br/>")
+   output+="<br/>"
+   my_ranked_stats = watcher.league.by_summoner(my_region, me['id'])
+   output+="RANKED DATA<br/><br/>"
+   for line in my_ranked_stats[0]:
+      output+=(str(line) + ': ' + str(my_ranked_stats[0][line]) + "<br/>")
+   return output
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
