@@ -8,14 +8,14 @@ app = Flask(__name__)
 def home():
    return 'Hello World'
 
-api_key = 'RGAPI-23dbfb58-88f4-436a-a30e-818fe71f0f77'
+api_key = ''
 watcher = LolWatcher(api_key)
 my_region = 'na1'
 
 @app.route('/<summoner_name>')
 def lookup(summoner_name):
    output = "Showing data for %s<br/><br/>" % summoner_name
-   me = watcher.summoner.by_name(my_region, 'Rad Radius')
+   me = watcher.summoner.by_name(my_region, str(summoner_name))
    output+="ACCOUNT DATA<br/><br/>"
    for line in me:
       output+=(str(line) + ': ' + str(me[line])+"<br/>")
