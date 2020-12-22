@@ -15,10 +15,10 @@ def lookup(summoner_name):
 def search():
     if request.method == 'POST':
         user = request.form['nm']
-        return redirect(url_for('/', summoner_name = user))
+        return redirect(url_for('lookup', summoner_name = user))
     else:
         user = request.args.get('nm')
-        return redirect(url_for('/', summoner_name = user))
+        return redirect(url_for('lookup', summoner_name = user))
 
 if __name__ == '__main__':
    #app.run()
