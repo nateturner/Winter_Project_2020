@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+   <body>
+        <table border = 1>
+            <caption>Account Data</caption>
+            {% for line in lines %}
+               <tr>
+                  <th> {{ line }} </th>
+                  <td> {{ lines[line] }} </td>
+               </tr>
+            {% endfor %}
+         </table>
+        <br></br>
+        <br></br>
+        <table border = 1>
+            <caption>Ranked Data</caption>
+            {% for line in ranked[0] %}
+               <tr>
+                  <th> {{ line }} </th>
+                  <td> {{ ranked[0][line] }} </td>
+               </tr>
+            {% endfor %}
+         </table>
+
+   </body>
+</html>
