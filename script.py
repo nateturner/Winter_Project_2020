@@ -1,5 +1,5 @@
 
-from flask import Flask, redirect, url_for, request
+from flask import Flask, redirect, url_for, request, render_template
 from riotwatcher import LolWatcher, ApiError
 
 app = Flask(__name__)
@@ -14,17 +14,9 @@ my_region = 'na1'
 
 @app.route('/<summoner_name>')
 def lookup(summoner_name):
-   output = "Showing data for %s<br/><br/>" % summoner_name
    me = watcher.summoner.by_name(my_region, str(summoner_name))
-   output+="ACCOUNT DATA<br/><br/>"
-   for line in me:
-      output+=(str(line) + ': ' + str(me[line])+"<br/>")
-   output+="<br/>"
    my_ranked_stats = watcher.league.by_summoner(my_region, me['id'])
-   output+="RANKED DATA<br/><br/>"
-   for line in my_ranked_stats[0]:
-      output+=(str(line) + ': ' + str(my_ranked_stats[0][line]) + "<br/>")
-   return output
+   return render_template('summonerinfo.html', name = summoner_name, lines = me, ranked = my_ranked_stats)
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
