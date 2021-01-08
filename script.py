@@ -2,10 +2,11 @@
 from flask import Flask, redirect, url_for, request, render_template
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
-api_key = ''
+api_key = 'RGAPI-f05ce9e2-e382-45e3-8406-9fb9c6d5837a'
 watcher = LolWatcher(api_key)
 my_region = 'na1'
 
@@ -22,6 +23,14 @@ def lookup(summoner_name):
    my_matches = watcher.match.matchlist_by_account(my_region, me['accountId'])
    df_html = ''
 
+   latest = watcher.data_dragon.versions_for_region(my_region)['n']['champion']
+   static_champ_list = watcher.data_dragon.champions(latest, False, 'en_US')
+
+   champ_dict = {}
+   for key in static_champ_list['data']:
+       row = static_champ_list['data'][key]
+       champ_dict[row['key']] = row['id']
+
    for match in range(5):
        last_match = my_matches['matches'][match]
        match_detail = watcher.match.by_id(my_region, last_match['gameId'])
@@ -29,7 +38,8 @@ def lookup(summoner_name):
        participants = []
        for row in match_detail['participants']:
            participants_row = {}
-           participants_row['champion'] = row['championId']
+           #participants_row['champion'] = row['championId']
+           participants_row['championName'] = champ_dict[str(row['championId'])]
            #participants_row['spell1'] = row['spell1Id']
            #participants_row['spell2'] = row['spell2Id']
            participants_row['win'] = row['stats']['win']
