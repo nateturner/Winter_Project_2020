@@ -11,7 +11,7 @@ my_region = 'na1'
 
 @app.route('/')
 def home():
-   return 'Hello World'
+   return render_template('search.html')
 
 @app.route('/<summoner_name>')
 def lookup(summoner_name):
